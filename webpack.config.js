@@ -1,7 +1,7 @@
 /* eslint-disable */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+// const CopyPlugin = require('copy-webpack-plugin');
 
 const config = {
   entry: ['babel-polyfill', './src/index.jsx'],
@@ -56,11 +56,11 @@ const config = {
       title: 'otchet - react',
       template: 'index.html'
     }),
-    new CopyPlugin({
-      patterns: [
-        {from: 'src/assets/fonts', to: 'fonts'}
-      ]
-    })
+    // new CopyPlugin({
+    //   patterns: [
+    //     {from: 'src/assets/fonts', to: 'fonts'}
+    //   ]
+    // })
   ],
 };
 
