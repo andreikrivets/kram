@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Container from '@material-ui/core/Container';
+import { Container, CircularProgress } from '@material-ui/core';
 
 import Header from './components/header';
 import Search from './components/search';
+import MovieCard from './components/movieCard';
 
 import { fetchInitial } from './actions';
 
 const App = props => {
-  const { dispatch } = props;
+  const { dispatch, items } = props;
   useEffect(() => {
     async function fetchData() {
       const resp = await fetchInitial();
@@ -16,11 +17,24 @@ const App = props => {
     }
     fetchData();
   });
-
   return (
-    <Container maxWidth="md" style={{ textAlign: 'center' }}>
+    <Container
+      maxWidth="md"
+      variant="outlined"
+      style={{
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <Header />
       <Search />
+      {!items ? (
+        <CircularProgress style={{ marginTop: '15%' }} />
+      ) : (
+        items.map(el => <MovieCard data={el} />)
+      )}
     </Container>
   );
 };
