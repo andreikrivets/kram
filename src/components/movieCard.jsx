@@ -7,30 +7,59 @@ const spanStyle = {
   alignItems: 'flex-end',
 };
 
-const MovieCard = ({ data }) => {
+const MovieCard = ({ data, genres }) => {
   const imageUrl = `https://image.tmdb.org/t/p/w500/${data.poster_path}`;
-  console.log(data);
+  const gen = [];
+
+  genres.forEach(el => {
+    data.genre_ids.forEach(e => {
+      if (el.id === e) gen.push(el.name);
+    });
+  });
+
+  console.log(gen);
   return (
     <Card style={{ margin: '2%', minHeight: '200px', display: 'flex' }}>
       <div style={{ display: 'flex' }}>
         <CardContent
           style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}
         >
-          <Typography variant="h5">{`${data.title} / ${data.original_title}`}</Typography>
-          <Typography variant="subtitle1">{data.overview}</Typography>
-          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Typography variant="caption" style={spanStyle}>
-              <TheatersOutlined />
+          <Typography variant="h5" color="primary">
+            {data.title}
+          </Typography>
+          <Typography variant="caption">
+            {data.original_language !== 'en' ? data.original_title : null}
+          </Typography>
+          <Typography variant="subtitle1">
+            {data.overview.length < 300 ? data.overview : `${data.overview.slice(0, 300)}...`}
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '2%' }}>
+            <Typography variant="body2" style={spanStyle}>
+              <TheatersOutlined color="primary" />
               {data.media_type}
             </Typography>
-            <Typography variant="caption" style={spanStyle}>
-              <Language />
-              {data.original_language}
+            <Typography variant="body2" style={spanStyle} color="secondary">
+              <Language color="primary" />
+              {data.original_language.toUpperCase()}
             </Typography>
-            <Typography variant="caption" style={spanStyle}>
-              <StarBorder />
-              {`${data.vote_average}/${data.vote_count}`}
+            <Typography variant="body2" style={spanStyle}>
+              <StarBorder color="primary" />
+              {`${data.vote_average}`}
             </Typography>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              marginTop: '2%',
+              fontStyle: 'italic',
+            }}
+          >
+            {gen.map(el => (
+              <Typography variant="body2" color="primary">
+                {el}
+              </Typography>
+            ))}
           </div>
         </CardContent>
         <CardMedia image={imageUrl} title={data.title} style={{ minWidth: '20%' }} />

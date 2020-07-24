@@ -9,14 +9,12 @@ import MovieCard from './components/movieCard';
 import { fetchInitial } from './actions';
 
 const App = props => {
-  const { dispatch, items } = props;
+  const { dispatch, items, genres } = props;
+
   useEffect(() => {
-    async function fetchData() {
-      const resp = await fetchInitial();
-      dispatch(resp);
-    }
-    fetchData();
-  });
+    dispatch(fetchInitial());
+  }, []);
+
   return (
     <Container
       maxWidth="md"
@@ -33,7 +31,7 @@ const App = props => {
       {!items ? (
         <CircularProgress style={{ marginTop: '15%' }} />
       ) : (
-        items.map(el => <MovieCard data={el} />)
+        items.map(el => <MovieCard data={el} genres={genres} />)
       )}
     </Container>
   );
@@ -41,13 +39,15 @@ const App = props => {
 
 const mapStateToProps = state => {
   const { initialPosts } = state;
-  const { isFetching, items } = initialPosts || {
+  const { isFetching, items, genres } = initialPosts || {
     isFetching: true,
     items: [],
+    genres: [],
   };
 
   return {
     items,
+    genres,
     isFetching,
   };
 };
