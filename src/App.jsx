@@ -22,7 +22,6 @@ const App = props => {
   if (!items) return null;
   const infiniteScrollItems = [];
   items.map(el => infiniteScrollItems.push(<MovieCard data={el} genres={genres} key={uniqid()} />));
-  console.log(infiniteScrollItems);
   return (
     <Container
       maxWidth="md"
