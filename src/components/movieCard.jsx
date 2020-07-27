@@ -1,4 +1,5 @@
 import React from 'react';
+import uniqid from 'uniqid';
 import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { StarBorder, Language, TheatersOutlined } from '@material-ui/icons/';
 
@@ -8,7 +9,7 @@ const spanStyle = {
 };
 
 const MovieCard = ({ data, genres }) => {
-  const imageUrl = `https://image.tmdb.org/t/p/w500/${data.poster_path}`;
+  const imageUrl = `https://image.tmdb.org/t/p/w200${data.poster_path}`;
   const gen = [];
 
   genres.forEach(el => {
@@ -17,9 +18,8 @@ const MovieCard = ({ data, genres }) => {
     });
   });
 
-  console.log(gen);
   return (
-    <Card style={{ margin: '2%', minHeight: '200px', display: 'flex' }}>
+    <Card style={{ margin: '2%', minHeight: '250px', display: 'flex' }} key={uniqid()}>
       <div style={{ display: 'flex' }}>
         <CardContent
           style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}
@@ -56,7 +56,7 @@ const MovieCard = ({ data, genres }) => {
             }}
           >
             {gen.map(el => (
-              <Typography variant="body2" color="primary">
+              <Typography variant="body2" color="primary" key={uniqid()}>
                 {el}
               </Typography>
             ))}
