@@ -10,10 +10,7 @@ import {
 } from '../actions';
 
 const initialPosts = (state = {}, action) => {
-  // console.log(state.items);
   const currItems = state.items ? state.items.slice() : [];
-  // const currItems = state.items.slice();
-
   switch (action.type) {
     case RECEIVE_INITIAL_POSTS:
       return {

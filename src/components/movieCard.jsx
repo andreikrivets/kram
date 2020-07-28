@@ -9,7 +9,9 @@ const spanStyle = {
 };
 
 const MovieCard = ({ data, genres }) => {
-  const imageUrl = `https://image.tmdb.org/t/p/w200${data.poster_path}`;
+  const imageUrl = data.poster_path
+    ? `https://image.tmdb.org/t/p/w200${data.poster_path}`
+    : 'https://s.tocd.de/tontopf/BvHHq7JAYz/konfiguratorVorschauGross/32mm_c_hook_jpg';
   const gen = [];
 
   genres.forEach(el => {

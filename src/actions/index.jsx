@@ -5,6 +5,7 @@ export const GENRES_RECEIVE = 'GENRES_RECEIVE';
 export const REQUEST_MOVIES_PAGE = 'REQUEST_MOVIES_PAGE';
 export const RECEIVE_MOVIES_PAGE = 'RECEIVE_MOVIES_PAGE';
 
+const URL = 'https://api.themoviedb.org/3/';
 const API_KEY = 'bcfc6e741d87e6212b541081dfa14af7';
 
 export const initialRequest = () => ({
@@ -33,14 +34,14 @@ export const recieveGenresList = json => ({
 
 const fetchInitialMovies = () => dispatch => {
   dispatch(initialRequest());
-  return fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`)
+  return fetch(`${URL}trending/movie/week?api_key=${API_KEY}`)
     .then(response => response.json())
     .then(json => dispatch(receiveInitialPosts(json)));
 };
 
 const fetchMovies = page => dispatch => {
   dispatch(requestMovies(page));
-  return fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&page=${page}`)
+  return fetch(`${URL}trending/movie/week?api_key=${API_KEY}&page=${page}`)
     .then(response => response.json())
     .then(json => dispatch(recieveMovies(json)));
 };
@@ -49,9 +50,16 @@ export const fetchGenresList = () => dispatch => {
   dispatch({
     type: GENRES_REQUEST,
   });
-  return fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`)
+  return fetch(`${URL}genre/movie/list?api_key=${API_KEY}&language=en-US`)
     .then(response => response.json())
     .then(json => dispatch(recieveGenresList(json)));
+};
+
+const fetchSearchQuery = text => dispatch => {
+  dispatch(initialRequest(text));
+  return fetch(`${URL}search/movie?api_key=${API_KEY}&language=en-US&page=1&query=${text}`)
+    .then(response => response.json())
+    .then(json => dispatch(receiveInitialPosts(json)));
 };
 
 const shouldFetch = state => {
@@ -68,4 +76,7 @@ export const fetchInitial = () => (dispatch, getState) => {
   }
 };
 
-export const fetchMore = page => dispatch => dispatch(fetchMovies(page));
+export const fetchMore = page => (dispatch, getState) =>
+  !getState().initialPosts.isFetching ? dispatch(fetchMovies(page)) : null;
+
+export const search = text => dispatch => dispatch(fetchSearchQuery(text));

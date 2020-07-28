@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField } from '@material-ui/core';
 
-const Search = () => {
-  const [value, setValue] = useState('');
-  const [searchValue, setSearchValue] = useState('');
-  console.log(value, searchValue);
-
+const Search = ({ setSearchQuery }) => {
   const handleKeyDown = e => {
-    if (e.keyCode === 13) setSearchValue(e.target.value);
-    else setValue(e.target.value);
+    if (e.keyCode === 13) setSearchQuery(e.target.value);
   };
 
   return (
     <>
-      <TextField variant="outlined" onKeyDown={handleKeyDown} />
+      <TextField variant="outlined" onKeyUp={handleKeyDown} />
     </>
   );
 };
