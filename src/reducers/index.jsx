@@ -5,6 +5,7 @@ import {
   GENRES_RECEIVE,
   RECEIVE_MOVIES_PAGE,
   REQUEST_MOVIES_PAGE,
+  RECEIVE_SEARCH_RESULTS,
 } from '../actions';
 
 const data = (state = {}, action) => {
@@ -32,6 +33,13 @@ const data = (state = {}, action) => {
         ...state,
         isFetching: false,
         items: currItems.concat(action.posts),
+      };
+    case RECEIVE_SEARCH_RESULTS:
+      return {
+        ...state,
+        isFetching: false,
+        isSearch: true,
+        items: action.posts,
       };
     default:
       return state;

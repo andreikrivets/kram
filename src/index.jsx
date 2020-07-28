@@ -1,12 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Router, Route } from 'react-router';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import reducer from './reducers';
+import { createBrowserHistory } from 'history';
 
+import reducer from './reducers';
 import App from './App';
+
+const history = createBrowserHistory();
 
 const middleware = [thunk];
 if (process.env.NODE_ENV !== 'production') {
@@ -21,9 +25,15 @@ const store = createStore(
   )
 );
 
-render(
+const Container = () => (
   <Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>
+);
+
+render(
+  <Router history={history}>
+    <Route path="/" component={Container} />
+  </Router>,
   document.getElementById('root')
 );
