@@ -1,16 +1,15 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Router, Route } from 'react-router';
-import { createStore, applyMiddleware, compose } from 'redux';
-import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import { createBrowserHistory } from 'history';
+import { Switch, Route, Router } from 'react-router-dom';
+import { createStore, applyMiddleware, compose } from 'redux';
 
-import reducer from './reducers';
 import App from './App';
-
-const history = createBrowserHistory();
+import reducer from './reducers';
+import MoviePage from './pages/moviePage';
 
 const middleware = [thunk];
 if (process.env.NODE_ENV !== 'production') {
@@ -25,15 +24,17 @@ const store = createStore(
   )
 );
 
-const Container = () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+const MainPage = () => <App />;
 
 render(
-  <Router history={history}>
-    <Route path="/" component={Container} />
+  <Router history={createBrowserHistory()}>
+    <Provider store={store}>
+      <Switch>
+        <Route path="/" component={MainPage} />
+        <Route path="/movie" component={() => <MoviePage />} />
+      </Switch>
+      <App />
+    </Provider>
   </Router>,
   document.getElementById('root')
 );

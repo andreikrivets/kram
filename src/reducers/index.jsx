@@ -26,7 +26,7 @@ const data = (state = {}, action) => {
       return {
         ...state,
         isFetching: true,
-        page: action.page,
+        page: action.page + 1,
       };
     case RECEIVE_MOVIES_PAGE:
       return {

@@ -11,14 +11,16 @@ import MovieCard from './components/movieCard';
 import { fetchInitial, fetchMore, search } from './actions';
 
 const App = props => {
-  const { dispatch, items, genres } = props;
+  const { dispatch, items, genres, page } = props;
   const [query, setQuery] = useState('');
   useEffect(() => {
     dispatch(fetchInitial());
   }, []);
 
   const infiniteScrollItems = [];
-  const handleFetchMore = page => dispatch(fetchMore(page, query));
+  const handleFetchMore = () => {
+    dispatch(fetchMore(page, query));
+  };
   const handleSearchQuery = text => {
     setQuery(text);
     dispatch(search(text));
@@ -29,6 +31,18 @@ const App = props => {
       infiniteScrollItems.push(<MovieCard data={el} genres={genres} key={uniqid()} />)
     );
   } else return null;
+
+  const InfScroll = () => (
+    <InfiniteScroll
+      pageStart={page}
+      loadMore={handleFetchMore}
+      hasMore={true || false}
+      loader={<CircularProgress style={{ marginTop: '15%' }} key={uniqid()} />}
+      threshold={2500}
+    >
+      {infiniteScrollItems}
+    </InfiniteScroll>
+  );
 
   return (
     <Container
@@ -43,15 +57,7 @@ const App = props => {
     >
       <Header />
       <Search setSearchQuery={handleSearchQuery} />
-      <InfiniteScroll
-        pageStart={1}
-        loadMore={handleFetchMore}
-        hasMore={true || false}
-        loader={<CircularProgress style={{ marginTop: '15%' }} key={uniqid()} />}
-        threshold={2500}
-      >
-        {infiniteScrollItems}
-      </InfiniteScroll>
+      <InfScroll />
     </Container>
   );
 };

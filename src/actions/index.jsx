@@ -54,6 +54,7 @@ const fetchSearchQuery = text => dispatch => {
 };
 
 const shouldFetch = state => {
+  console.log(state.data.items);
   if (!state.data.items) return true;
   if (state.data.isFetching) return false;
   return false;
