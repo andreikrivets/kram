@@ -45,6 +45,7 @@ const App = props => {
         loadMore={handleFetchMore}
         hasMore={true || false}
         loader={<CircularProgress style={{ marginTop: '15%' }} key={uniqid()} />}
+        threshold={2500}
       >
         {infiniteScrollItems}
       </InfiniteScroll>
@@ -53,13 +54,13 @@ const App = props => {
 };
 
 const mapStateToProps = state => {
-  const { initialPosts } = state;
-  const { isFetching, items, genres, page, query } = initialPosts || {
-    isFetching: true,
-    items: [],
-    genres: [],
+  const { data } = state;
+  const { isFetching, items, genres, page, query } = data || {
     page: 1,
     query: '',
+    items: [],
+    genres: [],
+    isFetching: true,
   };
 
   return {

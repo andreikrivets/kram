@@ -1,28 +1,15 @@
 import { combineReducers } from 'redux';
 
 import {
-  INITIAL_REQUEST,
-  RECEIVE_INITIAL_POSTS,
   GENRES_REQUEST,
   GENRES_RECEIVE,
   RECEIVE_MOVIES_PAGE,
   REQUEST_MOVIES_PAGE,
 } from '../actions';
 
-const initialPosts = (state = {}, action) => {
+const data = (state = {}, action) => {
   const currItems = state.items ? state.items.slice() : [];
   switch (action.type) {
-    case RECEIVE_INITIAL_POSTS:
-      return {
-        ...state,
-        isFetching: false,
-        items: action.posts,
-      };
-    case INITIAL_REQUEST:
-      return {
-        ...state,
-        isFetching: true,
-      };
     case GENRES_REQUEST:
       return {
         ...state,
@@ -38,6 +25,7 @@ const initialPosts = (state = {}, action) => {
       return {
         ...state,
         isFetching: true,
+        page: action.page,
       };
     case RECEIVE_MOVIES_PAGE:
       return {
@@ -51,7 +39,7 @@ const initialPosts = (state = {}, action) => {
 };
 
 const rootReducer = combineReducers({
-  initialPosts,
+  data,
 });
 
 export default rootReducer;

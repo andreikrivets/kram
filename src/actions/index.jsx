@@ -1,5 +1,3 @@
-export const INITIAL_REQUEST = 'INITIAL_REQUEST';
-export const RECEIVE_INITIAL_POSTS = 'RECEIVE_INITIAL_POSTS';
 export const GENRES_REQUEST = 'GENRES_REQUEST';
 export const GENRES_RECEIVE = 'GENRES_RECEIVE';
 export const REQUEST_MOVIES_PAGE = 'REQUEST_MOVIES_PAGE';
@@ -8,18 +6,9 @@ export const RECEIVE_MOVIES_PAGE = 'RECEIVE_MOVIES_PAGE';
 const URL = 'https://api.themoviedb.org/3/';
 const API_KEY = 'bcfc6e741d87e6212b541081dfa14af7';
 
-export const initialRequest = () => ({
-  type: INITIAL_REQUEST,
-});
-
 export const requestMovies = page => ({
   type: REQUEST_MOVIES_PAGE,
   page,
-});
-
-export const receiveInitialPosts = json => ({
-  type: RECEIVE_INITIAL_POSTS,
-  posts: json.results,
 });
 
 export const recieveMovies = json => ({
@@ -31,13 +20,6 @@ export const recieveGenresList = json => ({
   type: GENRES_RECEIVE,
   genres: json.genres,
 });
-
-const fetchInitialMovies = () => dispatch => {
-  dispatch(initialRequest());
-  return fetch(`${URL}trending/movie/week?api_key=${API_KEY}`)
-    .then(response => response.json())
-    .then(json => dispatch(receiveInitialPosts(json)));
-};
 
 const fetchMovies = page => dispatch => {
   dispatch(requestMovies(page));
@@ -56,15 +38,15 @@ export const fetchGenresList = () => dispatch => {
 };
 
 const fetchSearchQuery = text => dispatch => {
-  dispatch(initialRequest(text));
+  dispatch(recieveMovies());
   return fetch(`${URL}search/movie?api_key=${API_KEY}&language=en-US&page=1&query=${text}`)
     .then(response => response.json())
-    .then(json => dispatch(receiveInitialPosts(json)));
+    .then(json => dispatch(recieveMovies(json)));
 };
 
 const shouldFetch = state => {
-  if (!state.initialPosts.items) return true;
-  if (state.initialPosts.isFetching) return false;
+  if (!state.data.items) return true;
+  if (state.data.isFetching) return false;
   return false;
 };
 
@@ -72,11 +54,11 @@ const shouldFetch = state => {
 export const fetchInitial = () => (dispatch, getState) => {
   if (shouldFetch(getState())) {
     dispatch(fetchGenresList());
-    return dispatch(fetchInitialMovies());
+    return dispatch(fetchMovies(1));
   }
 };
 
 export const fetchMore = page => (dispatch, getState) =>
-  !getState().initialPosts.isFetching ? dispatch(fetchMovies(page)) : null;
+  !getState().data.isFetching ? dispatch(fetchMovies(page)) : null;
 
 export const search = text => dispatch => dispatch(fetchSearchQuery(text));

@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 
 const Search = ({ setSearchQuery }) => {
   const handleKeyDown = e => {
-    if (e.keyCode === 13) setSearchQuery(e.target.value);
+    if (e.keyCode === 13 && e.target.value !== '') setSearchQuery(e.target.value);
   };
 
   return (
