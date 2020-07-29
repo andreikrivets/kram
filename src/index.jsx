@@ -1,11 +1,10 @@
 import React from 'react';
 import thunk from 'redux-thunk';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
-import { createBrowserHistory } from 'history';
-import { Switch, Route, Router } from 'react-router-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { Link, Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
 
 import App from './App';
 import reducer from './reducers';
@@ -15,26 +14,32 @@ const middleware = [thunk];
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
+
+const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
+
 const store = createStore(
   reducer,
   /* initialState, */
-  compose(
-    applyMiddleware(...middleware),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
+  composeEnhancers(applyMiddleware(...middleware))
 );
 
-const MainPage = () => <App />;
+const Nav = () => (
+  <>
+    <Link to="/"> main </Link>
+    <Link to="/movie"> movie </Link>
+  </>
+);
 
-render(
-  <Router history={createBrowserHistory()}>
-    <Provider store={store}>
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <Nav />
       <Switch>
-        <Route path="/" component={MainPage} />
+        <Route exact path="/" component={() => <App />} />
         <Route path="/movie" component={() => <MoviePage />} />
+        <Redirect from="*" to="/" />
       </Switch>
-      <App />
-    </Provider>
-  </Router>,
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
