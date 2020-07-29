@@ -24,7 +24,10 @@ const MovieCard = ({ data, genres }) => {
   return (
     <Card style={{ margin: '2%', minHeight: '250px', display: 'flex' }} key={uniqid()}>
       <CardActionArea>
-        <Link to="/movie" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link
+          to={{ pathname: '/movie', id: data.id, title: data.title }}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
           <div style={{ display: 'flex' }}>
             <CardContent
               style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}

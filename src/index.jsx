@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger());
 }
 
-const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   reducer,
@@ -30,13 +30,19 @@ const Nav = () => (
   </>
 );
 
+const Movie = props => {
+  const { location } = props;
+  const { id, title } = location;
+  return <MoviePage id={id} title={title} />;
+};
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Nav />
       <Switch>
         <Route exact path="/" component={() => <App />} />
-        <Route path="/movie" component={() => <MoviePage />} />
+        <Route path="/movie" component={Movie} />
         <Redirect from="*" to="/" />
       </Switch>
     </BrowserRouter>

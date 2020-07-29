@@ -2,7 +2,9 @@ export const GENRES_REQUEST = 'GENRES_REQUEST';
 export const GENRES_RECEIVE = 'GENRES_RECEIVE';
 export const REQUEST_MOVIES_PAGE = 'REQUEST_MOVIES_PAGE';
 export const RECEIVE_MOVIES_PAGE = 'RECEIVE_MOVIES_PAGE';
-export const RECEIVE_SEARCH_RESULTS = 'RECIEVE_SEARCH_RESULTS';
+export const RECEIVE_SEARCH_RESULTS = 'RECEIVE_SEARCH_RESULTS';
+export const REQUEST_MOVIE_INFO = 'REQUEST_MOVIE_INFO';
+export const RECEIVE_MOVIE_INFO = 'RECEIVE_MOVIE_INFO';
 
 const URL = 'https://api.themoviedb.org/3/';
 const API_KEY = 'bcfc6e741d87e6212b541081dfa14af7';
@@ -17,14 +19,19 @@ export const receiveMovies = json => ({
   posts: json.results,
 });
 
-export const recieveGenresList = json => ({
+export const receiveGenresList = json => ({
   type: GENRES_RECEIVE,
   genres: json.genres,
 });
 
-export const rececieveSearchResults = json => ({
+export const receiveSearchResults = json => ({
   type: RECEIVE_SEARCH_RESULTS,
   posts: json.results,
+});
+
+export const receiveInfo = json => ({
+  type: RECEIVE_MOVIE_INFO,
+  info: json,
 });
 
 const fetchMovies = (page, text) => dispatch => {
@@ -37,20 +44,27 @@ const fetchMovies = (page, text) => dispatch => {
     .then(json => dispatch(receiveMovies(json)));
 };
 
-export const fetchGenresList = () => dispatch => {
+const fetchGenresList = () => dispatch => {
   dispatch({
     type: GENRES_REQUEST,
   });
   return fetch(`${URL}genre/movie/list?api_key=${API_KEY}&language=en-US`)
     .then(response => response.json())
-    .then(json => dispatch(recieveGenresList(json)));
+    .then(json => dispatch(receiveGenresList(json)));
 };
 
 const fetchSearchQuery = text => dispatch => {
   dispatch(requestMovies(1));
   return fetch(`${URL}search/movie?api_key=${API_KEY}&language=en-US&page=1&query=${text}`)
     .then(response => response.json())
-    .then(json => dispatch(rececieveSearchResults(json)));
+    .then(json => dispatch(receiveSearchResults(json)));
+};
+
+const fetchInfo = id => dispatch => {
+  dispatch({ type: REQUEST_MOVIE_INFO });
+  return fetch(`${URL}movie/${id}?api_key=${API_KEY}&language=en-US`)
+    .then(response => response.json())
+    .then(json => dispatch(receiveInfo(json)));
 };
 
 const shouldFetch = state => {
@@ -71,3 +85,7 @@ export const fetchMore = (page, text) => (dispatch, getState) =>
   !getState().data.isFetching ? dispatch(fetchMovies(page, text)) : null;
 
 export const search = text => dispatch => dispatch(fetchSearchQuery(text));
+
+export const fetchMovieInfo = id => (dispatch, getState) => {
+  if (!getState().info.isFetching) dispatch(fetchInfo(id));
+};

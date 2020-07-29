@@ -6,6 +6,8 @@ import {
   RECEIVE_MOVIES_PAGE,
   REQUEST_MOVIES_PAGE,
   RECEIVE_SEARCH_RESULTS,
+  RECEIVE_MOVIE_INFO,
+  REQUEST_MOVIE_INFO,
 } from '../actions';
 
 const data = (state = {}, action) => {
@@ -46,8 +48,27 @@ const data = (state = {}, action) => {
   }
 };
 
+const info = (state = {}, action) => {
+  switch (action.type) {
+    case REQUEST_MOVIE_INFO:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case RECEIVE_MOVIE_INFO:
+      return {
+        ...state,
+        isFetching: false,
+        movieInfo: action.info,
+      };
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   data,
+  info,
 });
 
 export default rootReducer;
