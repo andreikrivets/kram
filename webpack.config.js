@@ -1,5 +1,6 @@
 /* eslint-disable */
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   entry: ['./src/index.jsx'],
@@ -41,6 +42,12 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'kram',
+      template: 'index.html'
+    }),
+  ]
 };
 
 module.exports = config;
