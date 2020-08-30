@@ -32,8 +32,8 @@ const Nav = () => (
 
 const Movie = props => {
   const { location } = props;
-  const { id, title } = location;
-  return <MoviePage id={id} title={title} />;
+  const { id, title, gen } = location;
+  return <MoviePage id={id} title={title} gen={gen} />;
 };
 
 ReactDOM.render(
