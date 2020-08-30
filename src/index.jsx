@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { Link, Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
 
 import App from './App';
 import reducer from './reducers';
@@ -23,13 +23,6 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 );
 
-const Nav = () => (
-  <>
-    <Link to="/"> main </Link>
-    <Link to="/movie"> movie </Link>
-  </>
-);
-
 const Movie = props => {
   const { location } = props;
   const { id, title, gen } = location;
@@ -39,7 +32,6 @@ const Movie = props => {
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Nav />
       <Switch>
         <Route exact path="/" component={() => <App />} />
         <Route path="/movie" component={Movie} />

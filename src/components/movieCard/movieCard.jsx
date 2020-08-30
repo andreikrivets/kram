@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import uniqid from 'uniqid';
-import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@material-ui/core';
-import { StarBorder, Language, TheatersOutlined } from '@material-ui/icons/';
+import { Card, CardContent, CardActionArea, Typography } from '@material-ui/core';
+
+import useStyles from './movieCardStyle';
 
 const spanStyle = {
   display: 'flex',
@@ -14,25 +15,26 @@ const MovieCard = ({ data, genres }) => {
     ? `https://image.tmdb.org/t/p/w200${data.poster_path}`
     : 'https://s.tocd.de/tontopf/BvHHq7JAYz/konfiguratorVorschauGross/32mm_c_hook_jpg';
   const gen = [];
-
+  if (!genres) return null;
   genres.forEach(el => {
     data.genre_ids.forEach(e => {
       if (el.id === e) gen.push(el.name);
     });
   });
 
+  const classes = useStyles();
+
   return (
-    <Card style={{ margin: '2%', minHeight: '250px', display: 'flex' }} key={uniqid()}>
+    <Card className={classes.card} key={uniqid()}>
       <CardActionArea>
         <Link
           to={{ pathname: '/movie', id: data.id, title: data.title, gen }}
-          style={{ textDecoration: 'none', color: 'inherit' }}
+          className={classes.link}
         >
           <div style={{ display: 'flex' }}>
-            <CardContent
-              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}
-            >
-              <Typography variant="h5" color="primary">
+            <img src={imageUrl} title={data.title} className={classes.img} alt="pic" />
+            <CardContent className={classes.cardContent}>
+              <Typography variant="h5" color="primary" style={{ fontSize: '2rem' }}>
                 {data.title}
               </Typography>
               <Typography variant="caption">
@@ -41,28 +43,27 @@ const MovieCard = ({ data, genres }) => {
               <Typography variant="subtitle1">
                 {data.overview.length < 300 ? data.overview : `${data.overview.slice(0, 300)}...`}
               </Typography>
-              <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '2%' }}>
+              <div className={classes.mainInfo}>
                 <Typography variant="body2" style={spanStyle}>
-                  <TheatersOutlined color="primary" />
+                  <span role="img" aria-label="img">
+                    🎥
+                  </span>
                   {data.media_type}
                 </Typography>
                 <Typography variant="body2" style={spanStyle} color="secondary">
-                  <Language color="primary" />
+                  <span role="img" aria-label="img">
+                    🌐
+                  </span>
                   {data.original_language.toUpperCase()}
                 </Typography>
                 <Typography variant="body2" style={spanStyle}>
-                  <StarBorder color="primary" />
+                  <span role="img" aria-label="img">
+                    ⭐
+                  </span>
                   {`${data.vote_average}`}
                 </Typography>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  marginTop: '2%',
-                  fontStyle: 'italic',
-                }}
-              >
+              <div className={classes.genres}>
                 {gen.map(el => (
                   <Typography variant="body2" color="primary" key={uniqid()}>
                     {el}
@@ -70,7 +71,6 @@ const MovieCard = ({ data, genres }) => {
                 ))}
               </div>
             </CardContent>
-            <CardMedia image={imageUrl} title={data.title} style={{ minWidth: '20%' }} />
           </div>
         </Link>
       </CardActionArea>

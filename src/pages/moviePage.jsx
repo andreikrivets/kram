@@ -7,78 +7,52 @@ import { Card, Typography } from '@material-ui/core';
 import { fetchMovieInfo } from '../actions';
 import Header from '../components/header';
 
+import useStyles from './moviePageStyle';
+
 const MoviePage = props => {
   const { id, title, dispatch, movieInfo, gen } = props;
+  const classes = useStyles();
   if (!id) return <Redirect to="/" />;
   useEffect(() => {
     dispatch(fetchMovieInfo(id));
   }, []);
 
   if (!movieInfo) return null;
-  const IMG = `https://image.tmdb.org/t/p/w400${movieInfo.poster_path}`;
+  const IMG = `https://image.tmdb.org/t/p/w300${movieInfo.poster_path}`;
   const usd = `${movieInfo.budget}`
     .split('')
     .reverse()
     .map((el, i) => (i % 3 === 0 ? `${el} ` : el))
     .reverse()
     .join('');
-  console.log(props);
+
   return (
     <>
       <Header />
-      <Card
-        maxWidth="md"
-        variant="outlined"
-        style={{
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          margin: '2% 5%',
-          padding: '2% 5%',
-        }}
-      >
-        <Typography variant="h3">
-          <a href={movieInfo.homepage} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Card maxwidth="md" variant="outlined" className={classes.movieCard}>
+        <Typography variant="h3" color="primary">
+          <a href={movieInfo.homepage} className={classes.headerLink}>
             {title}
           </a>
         </Typography>
         <Typography variant="h5">{movieInfo.original_titile || ''}</Typography>
-        <img src={IMG} alt="img" style={{ margin: '5%', borderRadius: '5px' }} />
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'baseline',
-          }}
-        >
+        <img src={IMG} alt="img" className={classes.poster} />
+        <div className={classes.tagline}>
           <span role="img" aria-label="img">
             🏷️
           </span>
           <Typography variant="body2">{movieInfo.tagline}</Typography>
         </div>
-        <Typography
-          variant="body1"
-          style={{ textAlign: 'justify', marginTop: '5%', marginBottom: '10%' }}
-        >
+        <Typography variant="body1" className={classes.descr}>
           {movieInfo.overview}
         </Typography>
-        <div style={{ display: 'flex', marginTop: '1%' }}>
+        <div className={classes.dollar}>
           <span role="img" aria-label="img">
             💲
           </span>
           <Typography>{`${usd}`}</Typography>
         </div>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-around',
-            marginTop: '2%',
-            fontStyle: 'italic',
-          }}
-        >
+        <div className={classes.genres}>
           {gen.map(el => (
             <Typography variant="body2" color="primary" key={uniqid()}>
               {el}
