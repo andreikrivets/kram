@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
 import uniqid from 'uniqid';
 import { Container, CircularProgress } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Header from './components/header';
 import Search from './components/search';
@@ -13,6 +14,8 @@ import { fetchInitial, fetchMore, search } from './actions';
 const App = props => {
   const { dispatch, items, genres, page } = props;
   const [query, setQuery] = useState('');
+  const mobile = !useMediaQuery('(min-width:800px)');
+  console.log(mobile);
   useEffect(() => {
     dispatch(fetchInitial());
   }, []);
@@ -46,13 +49,15 @@ const App = props => {
 
   return (
     <Container
-      maxWidth="md"
+      maxWidth={mobile ? 'sd' : 'md'}
       variant="outlined"
       style={{
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        paddingLeft: mobile ? '2px' : '16px',
+        paddingRight: mobile ? '2px' : '16px',
       }}
     >
       <Header />
