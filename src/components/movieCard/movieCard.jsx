@@ -31,7 +31,7 @@ const MovieCard = ({ data, genres }) => {
   });
 
   const classes = device ? mainStyle() : mobile();
-  const descrLengh = device ? 300 : 100;
+  const descrLengh = device ? 200 : 100;
 
   return (
     <Card className={classes.card} key={uniqid()}>
@@ -76,8 +76,8 @@ const MovieCard = ({ data, genres }) => {
               </div>
               <div className={classes.genres}>
                 {gen.map((el, i) =>
-                  i < 3 ? (
-                    <Typography variant="body2" color="primary" key={uniqid()}>
+                  i < 2 ? (
+                    <Typography variant="body2" key={uniqid()} className={classes.genresNames}>
                       {el}
                     </Typography>
                   ) : (

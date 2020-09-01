@@ -15,7 +15,7 @@ const App = props => {
   const { dispatch, items, genres, page } = props;
   const [query, setQuery] = useState('');
   const mobile = !useMediaQuery('(min-width:800px)');
-  console.log(mobile);
+
   useEffect(() => {
     dispatch(fetchInitial());
   }, []);
