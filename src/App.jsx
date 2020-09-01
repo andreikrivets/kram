@@ -33,7 +33,7 @@ const App = props => {
     items.map(el =>
       infiniteScrollItems.push(<MovieCard data={el} genres={genres} key={uniqid()} />)
     );
-  } else return null;
+  } else return <CircularProgress style={{ marginLeft: '50%', marginTop: '20%' }} />;
 
   const InfScroll = () => (
     <InfiniteScroll
@@ -49,7 +49,7 @@ const App = props => {
 
   return (
     <Container
-      maxWidth={mobile ? 'sd' : 'md'}
+      maxWidth={mobile ? 'sm' : 'md'}
       variant="outlined"
       style={{
         textAlign: 'center',
