@@ -34,7 +34,8 @@ const data = (state = {}, action) => {
       return {
         ...state,
         isFetching: false,
-        items: currItems.concat(action.posts),
+        items: !state.isSearch ? currItems.concat(action.posts) : action.posts,
+        isSearch: false,
       };
     case RECEIVE_SEARCH_RESULTS:
       return {

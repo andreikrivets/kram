@@ -20,32 +20,41 @@ const App = props => {
     dispatch(fetchInitial());
   }, []);
 
-  const infiniteScrollItems = [];
+  let infiniteScrollItems = [];
   const handleFetchMore = () => {
     dispatch(fetchMore(page, query));
   };
   const handleSearchQuery = text => {
     setQuery(text);
-    dispatch(search(text));
+    return text ? dispatch(search(text)) : dispatch(fetchMore(1, ''));
   };
 
-  if (items) {
-    items.map(el =>
-      infiniteScrollItems.push(<MovieCard data={el} genres={genres} key={uniqid()} />)
-    );
-  } else return <CircularProgress style={{ marginLeft: '50%', marginTop: '20%' }} />;
-
-  const InfScroll = () => (
-    <InfiniteScroll
-      pageStart={page}
-      loadMore={handleFetchMore}
-      hasMore={true || false}
-      loader={<CircularProgress style={{ marginTop: '15%' }} key={uniqid()} />}
-      threshold={2500}
-    >
-      {infiniteScrollItems}
-    </InfiniteScroll>
+  const LoadingProgress = () => (
+    <CircularProgress style={{ marginLeft: '50%', marginTop: '20%' }} />
   );
+  const MainBlock = () => {
+    if (items) {
+      infiniteScrollItems = [];
+      items.map(el =>
+        infiniteScrollItems.push(<MovieCard data={el} genres={genres} key={uniqid()} />)
+      );
+      if (items.length < 3) {
+        return <MovieCard data={items[0]} genres={genres} />;
+      }
+      return (
+        <InfiniteScroll
+          pageStart={page}
+          loadMore={handleFetchMore}
+          hasMore={true || false}
+          loader={<CircularProgress style={{ marginTop: '15%' }} key={uniqid()} />}
+          threshold={2500}
+        >
+          {infiniteScrollItems}
+        </InfiniteScroll>
+      );
+    }
+    return <LoadingProgress />;
+  };
 
   return (
     <Container
@@ -62,7 +71,7 @@ const App = props => {
     >
       <Header />
       <Search setSearchQuery={handleSearchQuery} />
-      <InfScroll />
+      <MainBlock />
     </Container>
   );
 };
